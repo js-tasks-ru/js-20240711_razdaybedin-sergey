@@ -10,7 +10,7 @@ export function createGetter(path) {
     let current = obj;
     for (const key of fields) {
       if (!current || !Object.prototype.hasOwnProperty.call(current, key)) {
-        return undefined;
+        return;
       }
       current = current[key];
     }

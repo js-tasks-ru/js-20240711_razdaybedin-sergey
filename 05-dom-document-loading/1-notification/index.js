@@ -1,11 +1,7 @@
 export default class NotificationMessage {
-  static currentMessage;
+  static lastShownComponent;
 
   constructor(message, { duration = 1000, type = 'success' } = {}) {
-
-    if (NotificationMessage.currentMessage) {
-      NotificationMessage.currentMessage.remove();
-    }
 
     this.message = message;
     this.duration = duration;
@@ -15,8 +11,6 @@ export default class NotificationMessage {
     element.innerHTML = this.createTemplate();
 
     this.element = element.firstElementChild;
-    NotificationMessage.currentMessage = this.element;
-
   }
 
   createTemplate() {
@@ -39,14 +33,22 @@ export default class NotificationMessage {
 
   destroy() {
     this.remove();
-    NotificationMessage.currentMessage = null;
-    this.element = null;
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+    }
   }
 
   show(parent = document.body) {
+
+    if (NotificationMessage.lastShownComponent) {
+      NotificationMessage.lastShownComponent.remove();
+    }
+
+    NotificationMessage.lastShownComponent = this.element;
+
     parent.append(this.element);
 
-    setTimeout(() => {
+    this.timerId = setTimeout(() => {
       this.remove();
     }, this.duration);
   }

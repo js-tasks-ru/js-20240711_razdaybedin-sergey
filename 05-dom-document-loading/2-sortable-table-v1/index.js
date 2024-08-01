@@ -8,30 +8,30 @@ export default class SortableTable {
 
   render() {
     const wrapper = document.createElement('div');
-    wrapper.innerHTML = this.getTable();
+    wrapper.innerHTML = this.createTemplate();
     this.element = wrapper.firstElementChild;
 
     this.subElements = this.getSubElements(this.element);
   }
 
-  getTable() {
+  createTemplate() {
     return `
     <div class="sortable-table">
-      ${this.getHeader()}
-      ${this.getBody()}
+      ${this.createHeaderTemplate()}
+      ${this.createBodyTemplate()}
     </div>
       `;
   }
 
-  getHeader() {
+  createHeaderTemplate() {
     return `
     <div data-element="header" class="sortable-table__header sortable-table__row">
-      ${this.headerConfig.map(item => this.getHeaderRow(item)).join('')}
+      ${this.headerConfig.map(item => this.createHeaderRowTemplate(item)).join('')}
     </div>
      `;
   }
 
-  getHeaderRow({ id, title, sortable }) {
+  createHeaderRowTemplate({ id, title, sortable }) {
     return `
     <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortable}">
       <span>${title}</span>
@@ -39,20 +39,20 @@ export default class SortableTable {
       `;
   }
 
-  getBody() {
+  createBodyTemplate() {
     return `
     <div data-element="body" class="sortable-table__body">
-      ${this.getRows(this.data)}
+      ${this.createRowTempate(this.data)}
     </div>
       `;
   }
 
-  getRows(data) {
+  createRowTempate(data) {
     return data.map(item =>
       `<a href="/products/${item.id}" class="sortable-table__row">
-        <div class="sortable-table__cell">${item.title}</div>
-        <div class="sortable-table__cell">${item.price}</div>
-        <div class="sortable-table__cell">${item.sales}</div>
+        ${this.headerConfig.map(({ id, template }) => {
+          return `<div class="sortable-table__cell">${item[id] !== undefined ? item[id] : ''}</div>`;
+        }).join('')}
       </a>`
     ).join('');
   }
@@ -70,7 +70,7 @@ export default class SortableTable {
     const currentColumn = this.element.querySelector(`.sortable-table__cell[data-id="${field}"]`);
 
     currentColumn.dataset.order = order;
-    this.subElements.body.innerHTML = this.getRows(sortedData);
+    this.subElements.body.innerHTML = this.createRowTempate(sortedData);
   }
 
   sortData(field, order) {

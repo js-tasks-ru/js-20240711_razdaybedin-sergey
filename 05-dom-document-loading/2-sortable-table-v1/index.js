@@ -51,6 +51,11 @@ export default class SortableTable {
     return data.map(item =>
       `<a href="/products/${item.id}" class="sortable-table__row">
         ${this.headerConfig.map(({ id, template }) => {
+
+          if (template) {
+            return template(item[id]);
+          }
+
           return `<div class="sortable-table__cell">${item[id] !== undefined ? item[id] : ''}</div>`;
         }).join('')}
       </a>`
@@ -97,7 +102,6 @@ export default class SortableTable {
 
   destroy() {
     this.remove();
-    this.subElements = {};
   }
 }
 

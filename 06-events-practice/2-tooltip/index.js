@@ -12,11 +12,13 @@ class Tooltip {
   initialize() {
     document.addEventListener('pointerover', this.handlePointerOver.bind(this));
     document.addEventListener('pointerout', this.handlePointerOut.bind(this));
+    document.addEventListener('pointermove', this.handlePointerMove.bind(this));
   }
 
   destroy() {
     document.removeEventListener('pointerover', this.handlePointerOver.bind(this));
     document.removeEventListener('pointerout', this.handlePointerOut.bind(this));
+    document.removeEventListener('pointermove', this.handlePointerMove.bind(this));
     this.hide();
   }
 
@@ -52,6 +54,12 @@ class Tooltip {
       const { clientX, clientY } = event;
       this.element.style.left = `${clientX + 10}px`;
       this.element.style.top = `${clientY + 10}px`;
+    }
+  }
+
+  handlePointerMove(event) {
+    if (this.tooltipText) {
+      this.positionTooltip(event);
     }
   }
 }

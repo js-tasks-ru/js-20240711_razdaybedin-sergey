@@ -7,18 +7,22 @@ class Tooltip {
     this.element = document.createElement('div');
     this.element.className = 'tooltip';
     this.tooltipText = '';
+
+    this.handlePointerOver = this.handlePointerOver.bind(this);
+    this.handlePointerOut = this.handlePointerOut.bind(this);
+    this.handlePointerMove = this.handlePointerMove.bind(this);
   }
 
   initialize() {
-    document.addEventListener('pointerover', this.handlePointerOver.bind(this));
-    document.addEventListener('pointerout', this.handlePointerOut.bind(this));
-    document.addEventListener('pointermove', this.handlePointerMove.bind(this));
+    document.addEventListener('pointerover', this.handlePointerOver);
+    document.addEventListener('pointerout', this.handlePointerOut);
+    document.addEventListener('pointermove', this.handlePointerMove);
   }
 
   destroy() {
-    document.removeEventListener('pointerover', this.handlePointerOver.bind(this));
-    document.removeEventListener('pointerout', this.handlePointerOut.bind(this));
-    document.removeEventListener('pointermove', this.handlePointerMove.bind(this));
+    document.removeEventListener('pointerover', this.handlePointerOver);
+    document.removeEventListener('pointerout', this.handlePointerOut);
+    document.removeEventListener('pointermove', this.handlePointerMove);
     this.hide();
   }
 
